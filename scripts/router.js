@@ -5,7 +5,7 @@ export const router = {};
 /**
  * Changes the "page" (state) that your SPA app is currently set to
  */
-router.setState = function() {
+router.setState = function(context, data) {
   /**
    * - There are three states that your SPA app will have
    *    1. The home page
@@ -35,4 +35,36 @@ router.setState = function() {
    *    1. You may add as many helper functions in this file as you like
    *    2. You may modify the parameters of setState() as much as you like
    */
+  const body = document.getElementsByTagName("BODY")[0];
+  const h1 = body.firstElementChild.firstElementChild;
+  const settings = body.firstElementChild.lastElementChild;
+  const entryPage = body.getElementsByTagName('entry-page')[0];
+  
+  if (context == "/#settings") {
+    // adding page details
+    document.title = "Settings";
+    body.className = "settings";
+    h1.innerHTML = "Settings";
+
+    // replacing entry page with empty one
+    entryPage.replaceWith(document.createElement('entry-page'));
+  }
+  else if (context.includes("/#entry")) {
+    // adding page details
+    document.title = "Entry " + data.entryNum.toString();
+    body.className = "single-entry";
+    h1.innerHTML = "Entry " + data.entryNum.toString();
+
+    // adding entry page to body
+    let newEntry = document.createElement('entry-page');
+    newEntry.entry = data.entry;
+    entryPage.replaceWith(newEntry);
+  }
+  else { // root and other new states created are caught here
+    // adding page details
+    document.title = "Lab 7 - Web Components";
+    body.className = "";
+    h1.innerHTML = "Journal Entries";
+    entryPage.replaceWith(document.createElement('entry-page'));
+  }
 }
